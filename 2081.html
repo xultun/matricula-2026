@@ -3,107 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrícula de Alumnos 2025</title>
+    <title>Sistema de Matrícula 2025</title>
     <style>
-        :root {
-            --verde-oscuro: #1a5c3d;
-            --verde-claro: #00a859;
-            --gris-fondo: #f4f4f4;
-            --dorado: #d4af37;
+        :root { 
+            --verde-oscuro: #1a5c3d; 
+            --verde-claro: #00a859; 
+            --gris: #f4f4f4; 
+            --dorado: #d4af37; 
         }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #fff; }
-        
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #fff; }
         header { 
-            background-color: var(--verde-oscuro); 
+            background: var(--verde-oscuro); 
             color: white; 
             padding: 20px; 
-            text-align: center;
-            border-bottom: 5px solid var(--dorado);
+            text-align: center; 
+            border-bottom: 5px solid var(--dorado); 
         }
-
-        /* Área de Búsqueda */
-        .search-area { background: #f9f9f9; padding: 25px; border-bottom: 1px solid #ccc; text-align: center; }
-        .search-box { width: 100%; max-width: 600px; padding: 15px; border: 2px solid var(--verde-claro); border-radius: 30px; outline: none; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        .results-container { max-width: 1250px; margin: 15px auto; overflow-x: auto; }
+        /* Buscador */
+        .search-area { background: #f9f9f9; padding: 25px; border-bottom: 1px solid #ccc; text-align: center; }
+        .search-box { 
+            width: 90%; 
+            max-width: 600px; 
+            padding: 15px; 
+            border: 2px solid var(--verde-claro); 
+            border-radius: 30px; 
+            outline: none; 
+            font-size: 16px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .results-container { max-width: 1200px; margin: 15px auto; overflow-x: auto; }
         .results-table { width: 100%; border-collapse: collapse; display: none; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
         .results-table th { background: var(--verde-oscuro); color: white; white-space: nowrap; }
         .results-table tr:nth-child(even) { background-color: #f2f2f2; }
 
-        .main-container { display: flex; min-height: 100vh; }
-
+        .main-container { display: flex; min-height: 80vh; }
+        
         /* Sidebar */
-        .sidebar { 
-            width: 280px; 
-            background-color: #fff; 
-            padding: 20px; 
-            border-right: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar h3 { color: #333; border-bottom: 2px solid var(--verde-claro); padding-bottom: 5px; margin-top: 20px; font-size: 18px; }
+        .sidebar { width: 300px; padding: 20px; border-right: 1px solid #ccc; background: #fff; }
+        .sidebar h3 { color: #333; border-bottom: 2px solid var(--verde-claro); padding-bottom: 5px; margin-top: 20px; }
+        
         .grade-btn { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 8px; 
-            background-color: var(--verde-claro); 
-            color: white; 
-            border: none; 
-            border-radius: 6px;
-            cursor: pointer; 
-            font-weight: bold;
-            text-align: left;
+            width: 100%; padding: 12px; margin-bottom: 8px; background: var(--verde-claro); 
+            color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: left; 
             transition: 0.3s;
         }
-        .grade-btn:hover { background-color: var(--verde-oscuro); transform: translateX(5px); }
+        .grade-btn:hover { background: var(--verde-oscuro); transform: translateX(5px); }
 
-        /* Botón para ver el Excel */
-        .sheet-btn {
-            margin-top: 30px;
-            background-color: #1d6f42;
-            color: white;
-            padding: 15px;
-            text-decoration: none;
-            text-align: center;
-            border-radius: 6px;
-            font-weight: bold;
-            display: block;
-            border-bottom: 4px solid #144d2e;
-            transition: 0.3s;
-        }
-        .sheet-btn:hover { background-color: #144d2e; }
-
-        /* Contenido de Secciones */
-        .content { flex-grow: 1; padding: 40px; background-color: var(--gris-fondo); }
-        .content h2 { color: var(--verde-oscuro); border-left: 5px solid var(--dorado); padding-left: 15px; }
-        .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 25px; }
+        /* Contenido Central */
+        .content { flex-grow: 1; padding: 40px; background: var(--gris); }
+        .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
         .section-btn { 
-            background-color: var(--verde-oscuro); 
+            background: var(--verde-oscuro); 
             color: white; 
-            padding: 20px; 
+            padding: 15px; 
             border: none; 
             border-radius: 8px; 
-            cursor: pointer;
-            font-size: 15px;
+            cursor: pointer; 
             font-weight: bold;
             transition: 0.2s;
         }
-        .section-btn:hover { background-color: #000; transform: scale(1.05); }
+        .section-btn:hover { background: #000; transform: scale(1.05); }
 
         /* Modal */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-        .modal-content { background: white; margin: 2% auto; width: 450px; border-radius: 12px; overflow: hidden; animation: slideDown 0.3s; }
-        @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+        .modal-content { background: white; margin: 2% auto; width: 420px; border-radius: 12px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-header h3 { margin: 0 0 15px 0; color: var(--verde-oscuro); text-align: center; }
         
-        .modal-header { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #eee; position: relative; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #666; }
+        form label { font-size: 12px; font-weight: bold; color: #666; display: block; margin-top: 10px; }
+        form input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         
-        form { padding: 25px; }
-        form label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
-        form input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .submit-btn { background-color: var(--verde-oscuro); color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 20px; }
-        .submit-btn:hover { background-color: #000; }
+        .submit-btn { background: var(--verde-oscuro); color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 20px; font-size: 16px; }
+        .submit-btn:hover { background: #000; }
+        .cancel-link { display: block; text-align: center; color: red; cursor: pointer; margin-top: 15px; font-size: 14px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -113,17 +87,17 @@
 </header>
 
 <div class="search-area">
-    <input type="text" id="searchInput" class="search-box" placeholder="🔍 Escribe Nombre o DNI del alumno y presiona Enter para buscar...">
-    <div id="loadingSearch" style="display:none; margin-top:15px; font-weight: bold; color: var(--verde-claro);">Buscando en la base de datos...</div>
+    <input type="text" id="searchInput" class="search-box" placeholder="🔎 Buscar por Nombre o DNI (Presiona Enter)...">
+    <div id="loading" style="display:none; margin-top:15px; font-weight: bold; color: var(--verde-claro);">Buscando en la base de datos...</div>
     
     <div class="results-container">
         <table id="resTable" class="results-table">
             <thead>
                 <tr>
-                    <th>Nivel - Grado/Sección</th>
-                    <th>Nombre del Alumno</th>
+                    <th>Grado - Nivel</th>
+                    <th>Nombre Alumno</th>
                     <th>DNI Alumno</th>
-                    <th>Nombre Apoderado</th>
+                    <th>Apoderado</th>
                     <th>DNI Apoderado</th>
                     <th>Celular</th>
                     <th>Dirección</th>
@@ -137,156 +111,147 @@
 <div class="main-container">
     <div class="sidebar">
         <h3>Primaria</h3>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '1° Grado', ['A','B','C','D'])">1° Grado</button>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '2° Grado', ['A','B','C','D'])">2° Grado</button>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '3° Grado', ['A','B','C','D','E'])">3° Grado</button>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '4° Grado', ['A','B','C','D','E'])">4° Grado</button>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '5° Grado', ['A','B','C','D','E'])">5° Grado</button>
-        <button class="grade-btn" onclick="showSections('PRIMARIA', '6° Grado', ['A','B','C','D','E'])">6° Grado</button>
+        <button class="grade-btn" onclick="render('1° Grado - Primaria', ['A','B','C','D'])">1° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('2° Grado - Primaria', ['A','B','C','D'])">2° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('3° Grado - Primaria', ['A','B','C','D','E'])">3° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('4° Grado - Primaria', ['A','B','C','D','E'])">4° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('5° Grado - Primaria', ['A','B','C','D','E'])">5° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('6° Grado - Primaria', ['A','B','C','D','E'])">6° Grado - Primaria</button>
 
         <h3>Secundaria</h3>
-        <button class="grade-btn" onclick="showSections('SECUNDARIA', '1° Sec', ['A','B','C','D','E'])">1° Sec</button>
-        <button class="grade-btn" onclick="showSections('SECUNDARIA', '2° Sec', ['A','B','C','D','E'])">2° Sec</button>
-        <button class="grade-btn" onclick="showSections('SECUNDARIA', '3° Sec', ['A','B','C','D','E'])">3° Sec</button>
-        <button class="grade-btn" onclick="showSections('SECUNDARIA', '4° Sec', ['A','B','C','D','E'])">4° Sec</button>
-        <button class="grade-btn" onclick="showSections('SECUNDARIA', '5° Sec', ['A','B','C','D'])">5° Sec</button>
-
-        <h3>CEBE</h3>
-        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 1', ['Inicial'])">Aula 1</button>
-        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 2', ['Primaria'])">Aula 2</button>
-        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 3', ['Primaria'])">Aula 3</button>
-
-        <a href="https://docs.google.com/spreadsheets/d/TU_ID_AQUI/edit" target="_blank" class="sheet-btn">📊 Ver Registro Completo (Excel)</a>
+        <button class="grade-btn" onclick="render('1° Sec - Secundaria', ['A','B','C','D','E'])">1° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('2° Sec - Secundaria', ['A','B','C','D','E'])">2° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('3° Sec - Secundaria', ['A','B','C','D','E'])">3° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('4° Sec - Secundaria', ['A','B','C','D','E'])">4° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('5° Sec - Secundaria', ['A','B','C','D'])">5° Sec - Secundaria</button>
     </div>
 
     <div class="content">
-        <h2 id="view-title">Seleccione un grado</h2>
+        <h2 id="view-title" style="color: var(--verde-oscuro)">Seleccione un nivel a la izquierda</h2>
         <div id="sections-container" class="sections-grid"></div>
     </div>
 </div>
 
-<div id="myModal" class="modal">
+<div id="regModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modal-title" style="margin:0; color: var(--verde-oscuro); font-size: 20px;"></h2>
+            <h3 id="modal-h"></h3>
         </div>
-        <form id="registrationForm">
-            <input type="hidden" id="input-grado-seccion" name="grado_seccion">
+        <form id="regForm">
+            <input type="hidden" id="in-grado" name="grado_seccion">
             
-            <label>NOMBRES Y APELLIDOS DEL ALUMNO</label>
-            <input type="text" name="nombre_alumno" placeholder="Ej: Juan Pérez Lopez" required>
+            <label>NOMBRE COMPLETO DEL ALUMNO</label>
+            <input type="text" name="nombre_alumno" placeholder="Ej: Juan Pérez" required>
             
             <label>DNI DEL ALUMNO</label>
-            <input type="text" name="dni_alumno" placeholder="Número de 8 dígitos" required>
+            <input type="text" name="dni_alumno" required>
             
             <label>NOMBRE DEL APODERADO</label>
-            <input type="text" name="nombre_apoderado" placeholder="Nombre del padre o madre">
+            <input type="text" name="nombre_apoderado">
             
             <label>DNI DEL APODERADO</label>
-            <input type="text" name="dni_padre" placeholder="DNI del apoderado">
+            <input type="text" name="dni_padre">
             
-            <label>NÚMERO DE CELULAR</label>
-            <input type="text" name="celular" placeholder="Ej: 987654321">
+            <label>CELULAR</label>
+            <input type="text" name="celular">
             
-            <label>DIRECCIÓN DE VIVIENDA</label>
-            <input type="text" name="direccion" placeholder="Av. / Calle / Mz.">
+            <label>DIRECCIÓN</label>
+            <input type="text" name="direccion">
 
-            <button type="submit" id="btn-enviar" class="submit-btn">FINALIZAR MATRÍCULA</button>
+            <button type="submit" id="btn-save" class="submit-btn">GUARDAR MATRÍCULA</button>
+            <a class="cancel-link" onclick="closeM()">Cancelar y cerrar</a>
         </form>
     </div>
 </div>
 
 <script>
-    const sectionsContainer = document.getElementById('sections-container');
-    const modal = document.getElementById('myModal');
-    const form = document.getElementById('registrationForm');
-    
-    // TU NUEVO LINK DE SCRIPT ACTUALIZADO
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyYpdtArIS6TzJb3JHDdGPLf6Xhskgt--qTz2p_DPB_3Fbmj7QZ2DQ5eHH6XOJDmYdatw/exec';
+    // TU LINK ACTUALIZADO
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvUkYnOWp24vn1MDDNunh_rtZU7NnU5xoS-GiRXt9Il4jaQoZ4VuvCSBWXd32lU9wsPw/exec';
 
-    // Función para mostrar secciones agregando el PREFIJO del nivel
-    function showSections(nivel, grado, letras) {
-        document.getElementById('view-title').innerText = nivel + " - " + grado;
-        sectionsContainer.innerHTML = ''; 
+    function render(gradoNivel, secciones) {
+        document.getElementById('view-title').innerText = "Secciones para: " + gradoNivel;
+        const container = document.getElementById('sections-container');
+        container.innerHTML = '';
         
-        letras.forEach(l => {
+        secciones.forEach(s => {
             const btn = document.createElement('button');
             btn.className = 'section-btn';
-            // Se guarda como: "PRIMARIA - 1° Grado "A""
-            const fullTitle = `${nivel} - ${grado} "${l}"`;
-            btn.innerText = grado + ` "${l}"`;
+            const tituloCompleto = `${gradoNivel} "${s}"`;
+            btn.innerText = `Sección "${s}"`;
             btn.onclick = () => {
-                document.getElementById('modal-title').innerText = "Inscribir en: " + fullTitle;
-                document.getElementById('input-grado-seccion').value = fullTitle;
-                modal.style.display = "block";
+                document.getElementById('modal-h').innerText = tituloCompleto;
+                document.getElementById('in-grado').value = tituloCompleto;
+                document.getElementById('regModal').style.display = 'block';
             };
-            sectionsContainer.appendChild(btn);
+            container.appendChild(btn);
         });
     }
 
-    // BUSCADOR CON FILTRO DE NIVEL
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    function closeM() { document.getElementById('regModal').style.display = 'none'; }
+
+    // LÓGICA DEL BUSCADOR
+    document.getElementById('searchInput').addEventListener('keypress', e => {
         if (e.key === 'Enter') {
-            const q = this.value;
-            if (q.length < 3) return alert("Escriba al menos 3 caracteres para buscar.");
+            const q = e.target.value;
+            if (q.length < 3) return alert("Por favor, ingrese al menos 3 caracteres para buscar.");
             
-            document.getElementById('loadingSearch').style.display = 'block';
+            document.getElementById('loading').style.display = 'block';
             document.getElementById('resTable').style.display = 'none';
 
             fetch(`${scriptURL}?q=${encodeURIComponent(q)}`)
-                .then(res => res.json())
+                .then(r => r.json())
                 .then(data => {
-                    document.getElementById('loadingSearch').style.display = 'none';
+                    document.getElementById('loading').style.display = 'none';
                     const tbody = document.getElementById('resBody');
                     tbody.innerHTML = '';
                     
                     if (data.length > 0) {
-                        data.forEach(item => {
+                        data.forEach(i => {
                             tbody.innerHTML += `<tr>
-                                <td><b>${item.grado}</b></td>
-                                <td>${item.nombre}</td>
-                                <td>${item.dni_alumno}</td>
-                                <td>${item.apoderado}</td>
-                                <td>${item.dni_padre}</td>
-                                <td>${item.celular}</td>
-                                <td>${item.direccion}</td>
+                                <td><b>${i.grado}</b></td>
+                                <td>${i.nombre}</td>
+                                <td>${i.dni_alumno}</td>
+                                <td>${i.apoderado}</td>
+                                <td>${i.dni_padre}</td>
+                                <td>${i.celular}</td>
+                                <td>${i.direccion}</td>
                             </tr>`;
                         });
                         document.getElementById('resTable').style.display = 'table';
                     } else {
-                        alert("No se encontró ningún registro con ese nombre o DNI.");
+                        alert("No se encontraron alumnos con ese nombre o DNI.");
                     }
                 })
                 .catch(err => {
-                    document.getElementById('loadingSearch').style.display = 'none';
-                    alert("Error al conectar con la base de datos.");
+                    document.getElementById('loading').style.display = 'none';
+                    alert("Error al conectar con el servidor.");
                 });
         }
     });
 
-    function closeModal() { modal.style.display = "none"; }
-
-    // ENVÍO DE FORMULARIO
-    form.addEventListener('submit', e => {
+    // LÓGICA DE GUARDADO
+    document.getElementById('regForm').addEventListener('submit', e => {
         e.preventDefault();
-        const btn = document.getElementById('btn-enviar');
+        const btn = document.getElementById('btn-save');
         btn.innerText = "REGISTRANDO..."; btn.disabled = true;
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
             .then(response => {
-                alert("¡Matrícula guardada exitosamente en el sistema!");
-                closeModal();
-                form.reset();
+                alert("¡Matrícula guardada con éxito!");
+                closeM();
+                e.target.reset();
             })
-            .catch(error => alert("Hubo un error al registrar. Intente de nuevo."))
+            .catch(error => alert("Hubo un error al intentar guardar."))
             .finally(() => {
-                btn.innerText = "FINALIZAR MATRÍCULA";
+                btn.innerText = "GUARDAR MATRÍCULA"; 
                 btn.disabled = false;
             });
     });
 
-    window.onclick = function(event) { if (event.target == modal) closeModal(); }
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('regModal')) closeM();
+    }
 </script>
 
 </body>
