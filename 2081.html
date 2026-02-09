@@ -9,16 +9,26 @@
             --verde-oscuro: #1a5c3d;
             --verde-claro: #00a859;
             --gris-fondo: #e0e0e0;
+            --dorado: #d4af37;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #fff; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #fff; }
         
         header { 
             background-color: var(--verde-oscuro); 
             color: white; 
             padding: 20px; 
             text-align: center;
-            border-bottom: 5px solid #d4af37; /* Detalle dorado opcional */
+            border-bottom: 5px solid var(--dorado);
         }
+
+        /* Buscador */
+        .search-area { background: #f9f9f9; padding: 20px; border-bottom: 1px solid #ccc; text-align: center; }
+        .search-box { width: 100%; max-width: 500px; padding: 12px; border: 2px solid var(--verde-claro); border-radius: 25px; outline: none; font-size: 16px; }
+        
+        .results-container { max-width: 1200px; margin: 10px auto; overflow-x: auto; }
+        .results-table { width: 100%; border-collapse: collapse; display: none; background: white; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .results-table th, .results-table td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
+        .results-table th { background: var(--verde-oscuro); color: white; }
 
         .main-container { display: flex; min-height: 90vh; }
 
@@ -28,8 +38,10 @@
             background-color: #fff; 
             padding: 20px; 
             border-right: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
         }
-        .sidebar h3 { color: #333; border-bottom: 2px solid var(--verde-claro); padding-bottom: 5px; }
+        .sidebar h3 { color: #333; border-bottom: 2px solid var(--verde-claro); padding-bottom: 5px; margin-top: 20px; }
         .grade-btn { 
             width: 100%; 
             padding: 12px; 
@@ -44,9 +56,23 @@
         }
         .grade-btn:hover { background-color: var(--verde-oscuro); }
 
+        /* Botón Google Sheet */
+        .sheet-btn {
+            margin-top: auto;
+            background-color: #1d6f42;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: bold;
+            display: block;
+            border-bottom: 3px solid #144d2e;
+        }
+        .sheet-btn:hover { background-color: #144d2e; }
+
         /* Contenido de Secciones */
         .content { flex-grow: 1; padding: 40px; background-color: var(--gris-fondo); }
-        .content h2 { color: #000; margin-top: 0; }
         .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 20px; }
         .section-btn { 
             background-color: var(--verde-oscuro); 
@@ -57,38 +83,15 @@
             cursor: pointer;
             font-size: 14px;
         }
-        .section-btn:hover { opacity: 0.9; }
 
-        /* Modal / Pop-up */
+        /* Modal */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
-        .modal-content { 
-            background: white; 
-            margin: 2% auto; 
-            padding: 0; 
-            width: 450px; 
-            border-radius: 8px; 
-            position: relative; 
-            overflow: hidden;
-        }
-        .modal-header { background: #fff; padding: 15px; text-align: center; position: relative; border-bottom: 1px solid #eee; }
-        .modal-header h2 { margin: 0; font-size: 24px; color: #000; }
-        .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #333; }
-        
+        .modal-content { background: white; margin: 2% auto; width: 450px; border-radius: 8px; overflow: hidden; }
+        .modal-header { background: #fff; padding: 15px; text-align: center; border-bottom: 1px solid #eee; position: relative; }
+        .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; }
         form { padding: 20px; }
-        form label { display: block; margin-top: 10px; color: #666; font-size: 14px; }
-        form input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .submit-btn { 
-            background-color: var(--verde-oscuro); 
-            color: white; 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 20px; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold;
-        }
+        form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .submit-btn { background-color: var(--verde-oscuro); color: white; width: 100%; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -97,33 +100,54 @@
     <h1>Matrícula de Alumnos 2025</h1>
 </header>
 
+<div class="search-area">
+    <input type="text" id="searchInput" class="search-box" placeholder="🔎 Buscar por Nombre o DNI del alumno (Enter)...">
+    <div id="loadingSearch" style="display:none; margin-top:10px;">Buscando...</div>
+    <div class="results-container">
+        <table id="resTable" class="results-table">
+            <thead>
+                <tr>
+                    <th>Nivel - Grado/Sec</th>
+                    <th>Alumno</th>
+                    <th>DNI</th>
+                    <th>Apoderado</th>
+                    <th>Celular</th>
+                    <th>Dirección</th>
+                </tr>
+            </thead>
+            <tbody id="resBody"></tbody>
+        </table>
+    </div>
+</div>
+
 <div class="main-container">
     <div class="sidebar">
         <h3>Primaria</h3>
-        <button class="grade-btn" onclick="showSections('1° Grado', ['A','B','C','D'])">1° Grado</button>
-        <button class="grade-btn" onclick="showSections('2° Grado', ['A','B','C','D'])">2° Grado</button>
-        <button class="grade-btn" onclick="showSections('3° Grado', ['A','B','C','D','E'])">3° Grado</button>
-        <button class="grade-btn" onclick="showSections('4° Grado', ['A','B','C','D','E'])">4° Grado</button>
-        <button class="grade-btn" onclick="showSections('5° Grado', ['A','B','C','D','E'])">5° Grado</button>
-        <button class="grade-btn" onclick="showSections('6° Grado', ['A','B','C','D','E'])">6° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '1° Grado', ['A','B','C','D'])">1° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '2° Grado', ['A','B','C','D'])">2° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '3° Grado', ['A','B','C','D','E'])">3° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '4° Grado', ['A','B','C','D','E'])">4° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '5° Grado', ['A','B','C','D','E'])">5° Grado</button>
+        <button class="grade-btn" onclick="showSections('Primaria', '6° Grado', ['A','B','C','D','E'])">6° Grado</button>
 
         <h3>Secundaria</h3>
-        <button class="grade-btn" onclick="showSections('1° Sec', ['A','B','C','D','E'])">1° Sec</button>
-        <button class="grade-btn" onclick="showSections('2° Sec', ['A','B','C','D','E'])">2° Sec</button>
-        <button class="grade-btn" onclick="showSections('3° Sec', ['A','B','C','D','E'])">3° Sec</button>
-        <button class="grade-btn" onclick="showSections('4° Sec', ['A','B','C','D','E'])">4° Sec</button>
-        <button class="grade-btn" onclick="showSections('5° Sec', ['A','B','C','D'])">5° Sec</button>
+        <button class="grade-btn" onclick="showSections('Secundaria', '1° Sec', ['A','B','C','D','E'])">1° Sec</button>
+        <button class="grade-btn" onclick="showSections('Secundaria', '2° Sec', ['A','B','C','D','E'])">2° Sec</button>
+        <button class="grade-btn" onclick="showSections('Secundaria', '3° Sec', ['A','B','C','D','E'])">3° Sec</button>
+        <button class="grade-btn" onclick="showSections('Secundaria', '4° Sec', ['A','B','C','D','E'])">4° Sec</button>
+        <button class="grade-btn" onclick="showSections('Secundaria', '5° Sec', ['A','B','C','D'])">5° Sec</button>
 
         <h3>CEBE</h3>
-        <button class="grade-btn" onclick="showSections('Aula 1 - Inicial', ['1° Grado', '2° Grado'])">Aula 1</button>
-        <button class="grade-btn" onclick="showSections('Aula 2 - Secciones', ['3° Grado', '4° Grado'])">Aula 2</button>
-        <button class="grade-btn" onclick="showSections('Aula 3 - Secciones', ['5° Grado', '6° Grado'])">Aula 3</button>
+        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 1 - Inicial', ['1° Grado', '2° Grado'])">Aula 1</button>
+        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 2 - Secciones', ['3° Grado', '4° Grado'])">Aula 2</button>
+        <button class="grade-btn" onclick="showSections('CEBE', 'Aula 3 - Secciones', ['5° Grado', '6° Grado'])">Aula 3</button>
+
+        <a href="TU_LINK_DE_GOOGLE_SHEET_AQUI" target="_blank" class="sheet-btn">📊 Abrir Google Sheet</a>
     </div>
 
     <div class="content">
         <h2 id="view-title">Seleccione un grado</h2>
-        <div id="sections-container" class="sections-grid">
-            </div>
+        <div id="sections-container" class="sections-grid"></div>
     </div>
 </div>
 
@@ -131,29 +155,16 @@
     <div class="modal-content">
         <div class="modal-header">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modal-title">1° Grado "B"</h2>
+            <h2 id="modal-title"></h2>
         </div>
         <form id="registrationForm">
             <input type="hidden" id="input-grado-seccion" name="grado_seccion">
-            
-            <label>Nombre Completo del Alumno</label>
             <input type="text" name="nombre_alumno" placeholder="Nombre Completo del Alumno" required>
-            
-            <label>DNI del Alumno</label>
             <input type="text" name="dni_alumno" placeholder="DNI del Alumno" required>
-            
-            <label>Nombre completo del padre o apoderado</label>
-            <input type="text" name="nombre_apoderado" placeholder="Nombre completo del padre o apoderado">
-            
-            <label>DNI del Padre o Apoderado</label>
-            <input type="text" name="dni_padre" placeholder="DNI del Padre o Apoderado">
-            
-            <label>Número de Celular</label>
+            <input type="text" name="nombre_apoderado" placeholder="Nombre completo del apoderado">
+            <input type="text" name="dni_padre" placeholder="DNI del Apoderado">
             <input type="text" name="celular" placeholder="Número de Celular">
-            
-            <label>Dirección</label>
             <input type="text" name="direccion" placeholder="Dirección">
-
             <button type="submit" id="btn-enviar" class="submit-btn">Enviar información</button>
         </form>
     </div>
@@ -163,24 +174,56 @@
     const sectionsContainer = document.getElementById('sections-container');
     const modal = document.getElementById('myModal');
     const form = document.getElementById('registrationForm');
-    
-    // REEMPLAZA ESTO CON TU URL DE GOOGLE APPS SCRIPT
     const scriptURL = 'https://script.google.com/macros/s/AKfycbz24jFW2gOjO0gWPs9g20bBxBlyEXmMFh2jOZuImorgVShpu3c7mJSkArAKCa_u8bx3wg/exec';
 
-    function showSections(grade, letters) {
-        document.getElementById('view-title').innerText = "Secciones";
+    // Función modificada para incluir el NIVEL (Primaria/Secundaria)
+    function showSections(level, grade, letters) {
+        document.getElementById('view-title').innerText = level + " - " + grade;
         sectionsContainer.innerHTML = ''; 
         
         letters.forEach(letter => {
             const btn = document.createElement('button');
             btn.className = 'section-btn';
-            // Formato de nombre: "1° Grado "A"" o "Aula 1 - Inicial "1° Grado""
-            const fullTitle = `${grade} "${letter}"`;
-            btn.innerText = fullTitle;
+            // Aquí creamos el título que se guardará: "Primaria - 1° Grado "A""
+            const fullTitle = `${level} - ${grade} "${letter}"`;
+            btn.innerText = grade + ` "${letter}"`;
             btn.onclick = () => openModal(fullTitle);
             sectionsContainer.appendChild(btn);
         });
     }
+
+    // BUSCADOR EN TIEMPO REAL
+    document.getElementById('searchInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const q = this.value;
+            if (q.length < 3) return alert("Escriba al menos 3 caracteres");
+            
+            document.getElementById('loadingSearch').style.display = 'block';
+            fetch(`${scriptURL}?q=${encodeURIComponent(q)}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('loadingSearch').style.display = 'none';
+                    const tbody = document.getElementById('resBody');
+                    tbody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            tbody.innerHTML += `<tr>
+                                <td><b>${item.grado}</b></td>
+                                <td>${item.nombre}</td>
+                                <td>${item.dni_alumno}</td>
+                                <td>${item.apoderado}</td>
+                                <td>${item.celular}</td>
+                                <td>${item.direccion}</td>
+                            </tr>`;
+                        });
+                        document.getElementById('resTable').style.display = 'table';
+                    } else {
+                        alert("No se encontraron resultados");
+                        document.getElementById('resTable').style.display = 'none';
+                    }
+                });
+        }
+    });
 
     function openModal(title) {
         document.getElementById('modal-title').innerText = title;
@@ -193,28 +236,20 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
         const btn = document.getElementById('btn-enviar');
-        btn.innerText = "Enviando...";
-        btn.disabled = true;
-
+        btn.innerText = "Enviando..."; btn.disabled = true;
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                alert("¡Matrícula registrada exitosamente!");
+            .then(() => {
+                alert("¡Matrícula registrada!");
                 closeModal();
                 form.reset();
             })
-            .catch(error => {
-                alert("Error al enviar. Intente de nuevo.");
-                console.error('Error!', error.message);
-            })
+            .catch(() => alert("Error al enviar."))
             .finally(() => {
-                btn.innerText = "Enviar información";
-                btn.disabled = false;
+                btn.innerText = "Enviar información"; btn.disabled = false;
             });
     });
 
-    window.onclick = function(event) {
-        if (event.target == modal) closeModal();
-    }
+    window.onclick = function(event) { if (event.target == modal) closeModal(); }
 </script>
 
 </body>
