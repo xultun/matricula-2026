@@ -3,60 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Integral de Matrícula 2025</title>
+    <title>Matrícula Escolar 2025</title>
     <style>
-        :root { --verde-oscuro: #1a5c3d; --verde-claro: #00a859; --gris: #f4f7f6; --dorado: #d4af37; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: var(--gris); color: #333; }
-        header { background: var(--verde-oscuro); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--dorado); }
+        :root { 
+            --verde-oscuro: #1a5c3d; 
+            --verde-claro: #00a859; 
+            --gris: #f4f4f4; 
+            --dorado: #d4af37; 
+        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #fff; }
+        header { 
+            background: var(--verde-oscuro); 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 5px solid var(--dorado); 
+        }
         
-        /* Buscador */
-        .search-section { background: white; padding: 25px; margin: 20px auto; max-width: 1200px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .search-box { width: 100%; max-width: 600px; padding: 15px; font-size: 18px; border: 2px solid var(--verde-claro); border-radius: 30px; outline: none; display: block; margin: 0 auto 15px; }
+        .search-area { background: #f9f9f9; padding: 25px; border-bottom: 1px solid #ccc; text-align: center; }
+        .search-box { 
+            width: 90%; max-width: 600px; padding: 15px; 
+            border: 2px solid var(--verde-claro); border-radius: 30px; 
+            outline: none; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
         
-        .table-container { overflow-x: auto; margin-top: 20px; border-radius: 8px; border: 1px solid #ddd; }
-        .results-table { width: 100%; border-collapse: collapse; display: none; min-width: 1100px; }
+        .results-container { max-width: 1250px; margin: 15px auto; overflow-x: auto; }
+        .results-table { width: 100%; border-collapse: collapse; display: none; background: white; }
         .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
         .results-table th { background: var(--verde-oscuro); color: white; }
-        .results-table tr:nth-child(even) { background-color: #f9f9f9; }
 
-        /* Contenedor Principal */
-        .main-container { display: flex; max-width: 1300px; margin: 20px auto; padding: 0 20px; gap: 30px; }
-        .sidebar { width: 300px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: fit-content; }
-        .content-area { flex-grow: 1; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); min-height: 500px; }
+        .main-container { display: flex; min-height: 80vh; }
+        .sidebar { width: 280px; padding: 20px; border-right: 1px solid #ccc; background: #fff; }
+        .sidebar h3 { color: #333; border-bottom: 2px solid var(--verde-claro); padding-bottom: 5px; margin-top: 20px; font-size: 16px;}
         
-        .grade-btn { width: 100%; padding: 12px; margin-bottom: 8px; background: var(--verde-claro); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-align: left; transition: 0.3s; }
+        .grade-btn { 
+            width: 100%; padding: 12px; margin-bottom: 8px; background: var(--verde-claro); 
+            color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: left; 
+            font-size: 13px; transition: 0.3s;
+        }
         .grade-btn:hover { background: var(--verde-oscuro); transform: translateX(5px); }
-        
-        .grid-sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
-        .section-btn { background: var(--verde-oscuro); color: white; padding: 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
-        .section-btn:hover { background: #000; transform: scale(1.05); }
 
-        /* Modales */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
-        .modal-content { background: white; margin: 5% auto; padding: 30px; width: 90%; max-width: 450px; border-radius: 15px; }
-        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
-        .submit-btn { background: var(--verde-oscuro); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        .content { flex-grow: 1; padding: 40px; background: var(--gris); }
+        .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .section-btn { 
+            background: var(--verde-oscuro); color: white; padding: 20px; 
+            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px;
+        }
+
+        /* MODAL Y FORMULARIO */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: white; margin: 2% auto; width: 420px; border-radius: 12px; padding: 25px; }
+        form label { font-size: 12px; font-weight: bold; color: #666; display: block; margin-top: 10px; }
         
-        h3 { border-left: 5px solid var(--dorado); padding-left: 10px; color: var(--verde-oscuro); }
+        form input { 
+            width: 100%; padding: 10px; margin-top: 5px; 
+            border: 1px solid #ccc; border-radius: 6px; 
+            box-sizing: border-box; 
+            text-transform: uppercase;
+        }
+        
+        /* Mensaje de error dinámico */
+        .error-msg {
+            color: #e74c3c;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 4px;
+            display: none; /* Oculto por defecto */
+        }
+
+        /* Mostrar el mensaje cuando el input es inválido */
+        input:invalid:not(:placeholder-shown) + .error-msg {
+            display: block;
+        }
+
+        input:invalid:not(:placeholder-shown) {
+            border-color: #e74c3c;
+            background-color: #fdf2f2;
+        }
+
+        .submit-btn { background: var(--verde-oscuro); color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 20px; font-size: 16px; }
+        .cancel-link { display: block; text-align: center; color: red; cursor: pointer; margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Institución Educativa 2081 - Matrícula 2026</h1>
+    <h1>Matrícula de Alumnos 2025</h1>
 </header>
 
-<div class="search-section">
-    <h3 style="text-align:center">Buscador Rápido de Alumnos</h3>
-    <input type="text" id="searchInput" class="search-box" placeholder="Escriba Nombre o DNI y presione Enter...">
+<div class="search-area">
+    <input type="text" id="searchInput" class="search-box" placeholder="🔎 Buscar por Nombre o DNI (Presiona Enter)...">
+    <div id="loading" style="display:none; margin-top:15px; font-weight: bold; color: var(--verde-claro);">Buscando...</div>
     
-    <div id="loading" style="display:none; text-align:center; color:var(--verde-claro); font-weight:bold;">Buscando en todos los registros...</div>
-    
-    <div class="table-container">
+    <div class="results-container">
         <table id="resTable" class="results-table">
             <thead>
                 <tr>
-                    <th>Grado/Sección</th>
+                    <th>Grado / Sección / Nivel</th>
                     <th>Nombre Alumno</th>
                     <th>DNI Alumno</th>
                     <th>Apoderado</th>
@@ -73,71 +116,106 @@
 <div class="main-container">
     <div class="sidebar">
         <h3>Nivel Primaria</h3>
-        <button class="grade-btn" onclick="render('1° Grado', ['A','B','C','D'])">1° Grado</button>
-        <button class="grade-btn" onclick="render('2° Grado', ['A','B','C','D'])">2° Grado</button>
-        <button class="grade-btn" onclick="render('3° Grado', ['A','B','C','D','E'])">3° Grado</button>
-        <button class="grade-btn" onclick="render('4° Grado', ['A','B','C','D','E'])">4° Grado</button>
-        <button class="grade-btn" onclick="render('5° Grado', ['A','B','C','D','E'])">5° Grado</button>
-        <button class="grade-btn" onclick="render('6° Grado', ['A','B','C','D','E'])">6° Grado</button>
-        
-        <h3 style="margin-top:20px;">Nivel Secundaria</h3>
-        <button class="grade-btn" onclick="render('1° Sec', ['A','B','C','D','E'])">1° Sec</button>
-        <button class="grade-btn" onclick="render('2° Sec', ['A','B','C','D','E'])">2° Sec</button>
-        <button class="grade-btn" onclick="render('3° Sec', ['A','B','C','D','E'])">3° Sec</button>
-        <button class="grade-btn" onclick="render('4° Sec', ['A','B','C','D','E'])">4° Sec</button>
-        <button class="grade-btn" onclick="render('5° Sec', ['A','B','C','D'])">5° Sec</button>
+        <button class="grade-btn" onclick="render('1° Grado', 'Primaria', ['A','B','C','D'])">1° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('2° Grado', 'Primaria', ['A','B','C','D'])">2° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('3° Grado', 'Primaria', ['A','B','C','D','E'])">3° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('4° Grado', 'Primaria', ['A','B','C','D','E'])">4° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('5° Grado', 'Primaria', ['A','B','C','D','E'])">5° Grado - Primaria</button>
+        <button class="grade-btn" onclick="render('6° Grado', 'Primaria', ['A','B','C','D','E'])">6° Grado - Primaria</button>
+
+        <h3>Nivel Secundaria</h3>
+        <button class="grade-btn" onclick="render('1° Sec', 'Secundaria', ['A','B','C','D','E'])">1° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('2° Sec', 'Secundaria', ['A','B','C','D','E'])">2° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('3° Sec', 'Secundaria', ['A','B','C','D','E'])">3° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('4° Sec', 'Secundaria', ['A','B','C','D','E'])">4° Sec - Secundaria</button>
+        <button class="grade-btn" onclick="render('5° Sec', 'Secundaria', ['A','B','C','D'])">5° Sec - Secundaria</button>
     </div>
 
-    <div class="content-area">
-        <h2 id="view-title" style="color: var(--verde-oscuro)">Panel de Matrícula</h2>
-        <p id="msg-init">Seleccione un grado en la lista de la izquierda para desplegar sus secciones disponibles.</p>
-        <div id="grid-sections" class="grid-sections"></div>
+    <div class="content">
+        <h2 id="view-title" style="color: var(--verde-oscuro)">Seleccione un grado</h2>
+        <div id="sections-container" class="sections-grid"></div>
     </div>
 </div>
 
-<div id="formModal" class="modal">
+<div id="regModal" class="modal">
     <div class="modal-content">
-        <h2 id="modal-h" style="margin-top:0; color:var(--verde-oscuro); text-align:center;"></h2>
+        <h3 id="modal-h" style="text-align:center; color: var(--verde-oscuro); font-size: 18px;"></h3>
         <form id="regForm">
             <input type="hidden" id="in-grado" name="grado_seccion">
-            <label><b>Información del Estudiante:</b></label>
-            <input type="text" name="nombre_alumno" placeholder="Nombres y Apellidos" required>
-            <input type="text" name="dni_alumno" placeholder="DNI Estudiante" required>
             
-            <label><b>Información del Apoderado:</b></label>
-            <input type="text" name="nombre_apoderado" placeholder="Nombre completo del Padre/Madre">
-            <input type="text" name="dni_padre" placeholder="DNI del Apoderado">
-            <input type="text" name="celular" placeholder="Celular de contacto">
-            <input type="text" name="direccion" placeholder="Dirección de vivienda">
+            <label>NOMBRES Y APELLIDOS DEL ALUMNO</label>
+            <input type="text" name="nombre_alumno" required placeholder="EJ: JUAN PÉREZ">
+            <div class="error-msg">* Solo se permiten letras</div>
+
+            <label>DNI DEL ALUMNO </label>
+            <input type="text" name="dni_alumno" required 
+                   pattern="\d{8}" maxlength="8" minlength="8" 
+                   placeholder="02631451">
+            <div class="error-msg">* Use solo números (8 dígitos)</div>
             
-            <button type="submit" id="btn-submit" class="submit-btn">Guardar Matrícula</button>
-            <button type="button" onclick="closeM()" style="background:none; border:none; color:#999; width:100%; margin-top:10px; cursor:pointer;">Cancelar registro</button>
+            <label>NOMBRE DEL APODERADO</label>
+            <input type="text" name="nombre_apoderado" required placeholder="NOMBRE COMPLETO">
+            <div class="error-msg">* Solo se permiten letras</div>
+            
+            <label>DNI DEL APODERADO </label>
+            <input type="text" name="dni_padre" required 
+                   pattern="\d{8}" maxlength="8" minlength="8" 
+                   placeholder="45781236">
+            <div class="error-msg">* Use solo números (8 dígitos)</div>
+            
+            <label>CELULAR DE CONTACTO </label>
+            <input type="text" name="celular" required 
+                   pattern="9\d{8}" maxlength="9" minlength="9" 
+                   placeholder="978881771">
+            <div class="error-msg">* Debe iniciar con 9 y tener 9 dígitos numéricos</div>
+            
+            <label>DIRECCIÓN DOMICILIARIA</label>
+            <input type="text" name="direccion" required placeholder="AV/CALLE/MZ/LOTE">
+
+            <button type="submit" id="btn-save" class="submit-btn">FINALIZAR REGISTRO</button>
+            <a class="cancel-link" onclick="closeM()">Cancelar</a>
         </form>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycby_5Ohg4ezmZnNXRe80gi7BNGEzQdMxq9q16Tp2M9uIPbm2M7LXtCh4aYj2bDN6U7mLhQ/exec'; // <--- PEGA TU URL DE IMPLEMENTACIÓN AQUÍ
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvUkYnOWp24vn1MDDNunh_rtZU7NnU5xoS-GiRXt9Il4jaQoZ4VuvCSBWXd32lU9wsPw/exec';
 
-    // BUSCADOR COMPLETO
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    function render(grado, nivel, secciones) {
+        document.getElementById('view-title').innerText = grado + " - " + nivel;
+        const container = document.getElementById('sections-container');
+        container.innerHTML = '';
+        secciones.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'section-btn';
+            const tituloParaExcel = `${grado} "${s}" - ${nivel}`;
+            btn.innerText = `Sección "${s}" - ${nivel}`;
+            btn.onclick = () => {
+                document.getElementById('modal-h').innerText = "Inscripción: " + tituloParaExcel;
+                document.getElementById('in-grado').value = tituloParaExcel;
+                document.getElementById('regModal').style.display = 'block';
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function closeM() { document.getElementById('regModal').style.display = 'none'; }
+
+    // BUSCADOR
+    document.getElementById('searchInput').addEventListener('keypress', e => {
         if (e.key === 'Enter') {
-            const q = this.value;
-            if (q.length < 3) return alert("Escriba al menos 3 caracteres.");
-            
+            const q = e.target.value.toUpperCase();
+            if (q.length < 3) return alert("Mínimo 3 caracteres");
             document.getElementById('loading').style.display = 'block';
-            document.getElementById('resTable').style.display = 'none';
-
             fetch(`${scriptURL}?q=${encodeURIComponent(q)}`)
                 .then(r => r.json())
                 .then(data => {
                     document.getElementById('loading').style.display = 'none';
-                    const body = document.getElementById('resBody');
-                    body.innerHTML = '';
-                    
+                    const tbody = document.getElementById('resBody');
+                    tbody.innerHTML = '';
                     if (data.length > 0) {
                         data.forEach(i => {
-                            body.innerHTML += `<tr>
+                            tbody.innerHTML += `<tr>
                                 <td><b>${i.grado}</b></td>
                                 <td>${i.nombre}</td>
                                 <td>${i.dni_alumno}</td>
@@ -148,55 +226,36 @@
                             </tr>`;
                         });
                         document.getElementById('resTable').style.display = 'table';
-                    } else {
-                        alert("No se encontraron resultados.");
-                    }
+                    } else { alert("No se encontró al alumno."); }
                 });
         }
     });
 
-    // RENDERIZAR SECCIONES
-    function render(grado, secciones) {
-        document.getElementById('msg-init').style.display = 'none';
-        document.getElementById('view-title').innerText = "Secciones de " + grado;
-        const container = document.getElementById('grid-sections');
-        container.innerHTML = '';
-        
-        secciones.forEach(s => {
-            const btn = document.createElement('button');
-            btn.className = 'section-btn';
-            const tituloCompleto = `${grado} "${s}"`;
-            btn.innerText = tituloCompleto;
-            btn.onclick = () => {
-                document.getElementById('modal-h').innerText = "Ficha: " + tituloCompleto;
-                document.getElementById('in-grado').value = tituloCompleto;
-                document.getElementById('formModal').style.display = 'block';
-            };
-            container.appendChild(btn);
-        });
-    }
-
-    function closeM() { document.getElementById('formModal').style.display = 'none'; }
-
-    // GUARDAR DATOS
+    // GUARDAR CON CONVERSIÓN A MAYÚSCULAS
     document.getElementById('regForm').addEventListener('submit', e => {
         e.preventDefault();
-        const s = document.getElementById('btn-submit');
-        s.innerText = "Registrando..."; s.disabled = true;
+        const btn = document.getElementById('btn-save');
+        btn.innerText = "GUARDANDO..."; btn.disabled = true;
+
+        const formData = new FormData(e.target);
+        const upperFormData = new FormData();
+
+        for (let [key, value] of formData.entries()) {
+            upperFormData.append(key, value.toUpperCase());
+        }
         
-        fetch(scriptURL, { method: 'POST', body: new FormData(e.target)})
+        fetch(scriptURL, { method: 'POST', body: upperFormData})
             .then(() => { 
-                alert("Alumno matriculado correctamente."); 
+                alert("Registro guardado exitosamente"); 
                 closeM(); 
                 e.target.reset(); 
             })
-            .catch(() => alert("Error al guardar."))
+            .catch(err => alert("Error al guardar."))
             .finally(() => { 
-                s.innerText = "Guardar Matrícula"; 
-                s.disabled = false; 
+                btn.innerText = "FINALIZAR REGISTRO"; 
+                btn.disabled = false; 
             });
     });
 </script>
-
 </body>
 </html>
